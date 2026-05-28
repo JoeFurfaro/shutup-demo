@@ -1,0 +1,22 @@
+{
+  "name": "shutup-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A small Next.js storefront demo that relies on env vars and secrets.",
+  "scripts": {
+    "dev": "next dev -p ${PORT:-3000}",
+    "build": "next build",
+    "start": "next start -p ${PORT:-3000}",
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js",
+    "docker:build": "./build.sh",
+    "docker:run": "./run.sh"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "pg": "8.12.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "stripe": "16.2.0"
+  }
+}
