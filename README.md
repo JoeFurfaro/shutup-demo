@@ -25,32 +25,33 @@ cp .env.example .env
 `NEXT_PUBLIC_*` values are inlined into the browser bundle at build time. The
 secrets are read at runtime and the app fails loudly if they're missing.
 
+Each layer loads `.env` its own way, which is typical for a Node app:
+
+- **Next.js** (`dev`/`build`/`start`) reads `.env` automatically — no loader needed.
+- **The node scripts** call `require("dotenv").config()`.
+- **The shell scripts** source `.env` if it's present (`[ -f .env ] && ...`).
+
 ## Develop
 
 ```sh
 npm install
-set -a; source .env; set +a    # load env into your shell
-npm run dev                    # http://localhost:${PORT:-3000}
+npm run dev        # Next auto-loads .env → http://localhost:${PORT:-3000}
 ```
 
 Visit `/api/health` to confirm the secrets are wired up.
 
 ## Database scripts
 
-These require the relevant secrets to be present in your shell:
-
 ```sh
-npm run migrate   # needs DATABASE_URL
-npm run seed      # needs DATABASE_URL + STRIPE_SECRET_KEY
+npm run migrate   # dotenv-loads .env, needs DATABASE_URL
+npm run seed      # dotenv-loads .env, needs DATABASE_URL + STRIPE_SECRET_KEY
 ```
 
 ## Docker
 
 ```sh
-set -a; source .env; set +a    # export config + secrets
-
-npm run docker:build           # ./build.sh — bakes NEXT_PUBLIC_* at build time
-npm run docker:run             # ./run.sh   — injects secrets via -e at run time
+npm run docker:build   # ./build.sh — sources .env, bakes NEXT_PUBLIC_* at build time
+npm run docker:run     # ./run.sh   — sources .env, injects secrets via -e at run time
 ```
 
 Public config is passed as build args; secrets are passed to `docker run` so they

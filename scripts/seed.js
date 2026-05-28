@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// Seeds demo data. Requires DATABASE_URL and STRIPE_SECRET_KEY in the shell —
+// Seeds demo data. Loads .env, then requires DATABASE_URL and STRIPE_SECRET_KEY —
 // products are created locally and registered with Stripe.
+require("dotenv").config();
 
 const { Client } = require("pg");
 const Stripe = require("stripe");

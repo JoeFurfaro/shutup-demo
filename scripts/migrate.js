@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Runs database migrations. Requires DATABASE_URL to be present in the shell.
+// Runs database migrations. Loads .env, then requires DATABASE_URL to be set.
+require("dotenv").config();
 
 const { Client } = require("pg");
 const { requireEnv, mask } = require("../lib/env");
